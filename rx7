@@ -3,112 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Script Listesi ve Arama</title>
+    <title>LW HUB SCRIPTS</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-            background-color: #1e1e1e;
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Ana Kutu (Container) */
+        .main-container {
+            background-color: #313131;
+            width: 450px;
+            padding: 30px 25px;
+            border-radius: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Başlık */
+        .title {
             color: #ffffff;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            text-align: center;
         }
 
-        /* Arama Kutusu Stili */
-        .search-container {
-            margin-bottom: 20px;
+        /* Arama Alanı */
+        .search-box {
+            position: relative;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        .search-box input {
+            width: 100%;
+            background-color: #8c8c8c;
+            border: none;
+            padding: 12px 15px 12px 45px;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 16px;
             font-weight: bold;
-        }
-
-        .search-container input {
-            padding: 8px;
-            width: 300px;
-            background-color: #2d2d2d;
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 4px;
             outline: none;
         }
 
-        .search-container input:focus {
-            border-color: #007bff;
+        .search-box input::placeholder {
+            color: #ffffff;
+            letter-spacing: 1px;
         }
 
-        /* Liste Öğesi */
-        .list-item {
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+        }
+
+        .search-icon::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 8px;
+            background-color: #ffffff;
+            bottom: -6px;
+            right: -4px;
+            transform: rotate(-45deg);
+        }
+
+        /* Script Kartı */
+        .script-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .script-card {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 12px 15px;
+            width: 100%;
+            position: relative;
+        }
+
+        .script-title {
+            color: #8c8c8c;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .script-content-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .script-code {
+            color: #b0b0b0;
+            font-size: 11px;
+            font-family: monospace;
+            word-break: break-all;
+            padding-right: 15px;
+            line-height: 1.3;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            padding-left: 15px;
+            border-left: 1px solid #555;
+            height: 35px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            background: #2d2d2d;
-            padding: 10px 15px;
-            margin: 8px 0;
-            border-radius: 5px;
-            border: 1px solid #444;
-            max-width: 700px;
+            transition: color 0.2s;
         }
 
-        .item-name {
-            font-weight: bold;
-            color: #ff5555;
-        }
-
-        button {
-            padding: 6px 12px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-
-        button:hover {
-            background-color: #0056b3;
+        .copy-btn:hover {
+            color: #00ffcc;
         }
     </style>
 </head>
 <body>
 
-    <!-- 1- Search Alanı (Tıklanınca otomatik yazı yazılabilir) -->
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search (Arama yapmak için yazın)..." onkeyup="filterItems()">
-    </div>
+    <div class="main-container">
+        <!-- Başlık -->
+        <div class="title">LW HUB SCRIPTS</div>
 
-    <hr style="border-color: #444; max-width: 700px; margin-left: 0;">
-
-    <!-- Liste -->
-    <div id="scriptList">
-        <!-- LAGGER Öğesi -->
-        <div class="list-item" data-name="LAGGER">
-            <span class="item-name">LAGGER</span>
-            <button onclick="copyCode('loadstring(game:HttpGet(\'https://raw.githubusercontent.com/LexionBB/SWX/refs/heads/main/SWXLagger\'))()')">Copy</button>
+        <!-- Arama Çubuğu -->
+        <div class="search-box">
+            <div class="search-icon"></div>
+            <input type="text" id="searchInput" placeholder="SEARCH" onkeyup="filterScripts()">
         </div>
 
-        <!-- İleride başka scriptler eklemek istersen diye örnek: -->
-        <div class="list-item" data-name="Örnek Script 2">
-            <span class="item-name">Örnek Script 2</span>
-            <button onclick="copyCode('print(\'Örnek 2\')')">Copy</button>
+        <!-- Script Listesi -->
+        <div class="script-list" id="scriptList">
+            
+            <!-- LAGGER Öğesi -->
+            <div class="script-card" data-name="LAGGER">
+                <div class="script-title">LAGGER</div>
+                <div class="script-content-area">
+                    <div class="script-code">loadstring(game:HttpGet('https://raw.githubusercontent.com/LexionBB/SWX/refs/heads/main/SWXLagger'))()</div>
+                    <button class="copy-btn" onclick="copyCode(this, 'loadstring(game:HttpGet(\'https://raw.githubusercontent.com/LexionBB/SWX/refs/heads/main/SWXLagger\'))()')">copy</button>
+                </div>
+            </div>
+
+            <!-- İstediğin kadar bu kalıpla çoğaltabilirsin -->
+
         </div>
     </div>
 
     <script>
-        // Arama Filtreleme Fonksiyonu (İsminde ne geçerse çıksın, büyük/küçük harf duyarsız)
-        function filterItems() {
+        // Arama (Filtreleme) Fonksiyonu
+        function filterScripts() {
             let input = document.getElementById('searchInput').value.toLowerCase();
-            let items = document.getElementsByClassName('list-item');
+            let cards = document.getElementsByClassName('script-card');
 
-            for (let i = 0; i < items.length; i++) {
-                let name = items[i].getAttribute('data-name').toLowerCase();
+            for (let i = 0; i < cards.length; i++) {
+                let name = cards[i].getAttribute('data-name').toLowerCase();
                 if (name.includes(input)) {
-                    items[i].style.display = "flex"; // Eşleşiyorsa göster
+                    cards[i].style.display = "block";
                 } else {
-                    items[i].style.display = "none";  // Eşleşmiyorsa gizle
+                    cards[i].style.display = "none";
                 }
             }
         }
 
-        // Kopyalama Fonksiyonu
-        function copyCode(code) {
+        // Kopyalama Fonksiyonu ve Görsel Geri Bildirim
+        function copyCode(buttonElement, code) {
             navigator.clipboard.writeText(code).then(() => {
-                alert('Script Kopyalandı!');
+                let originalText = buttonElement.innerText;
+                buttonElement.innerText = "copied!";
+                buttonElement.style.color = "#00ffcc";
+                
+                setTimeout(() => {
+                    buttonElement.innerText = originalText;
+                    buttonElement.style.color = "#ffffff";
+                }, 1500);
             }).catch(err => {
                 console.error('Kopyalama hatası: ', err);
             });
